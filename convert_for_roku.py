@@ -97,7 +97,7 @@ def convert(input_file):
         #             pbar.update(progress_percentage - pbar.n)
 
         process.wait()  # Wait for the process to finish
-        print("\nConversion successful.")
+        print(f"\nConversion of '{input_path.stem}' successful.")
 
     except subprocess.CalledProcessError as e:
         print(f"Error running ffmpeg: {e}")
