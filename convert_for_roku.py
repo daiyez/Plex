@@ -93,12 +93,12 @@ def convert(input_file):
 
         # Display a progress bar
         print("Converting:")
-        with tqdm(total=duration, unit="s", dynamic_ncols=True) as pbar:
-            for line in process.stderr:
-                if "time=" in line:
-                    time_info = line.split("=")[1].split()[0].split(":")
-                    elapsed_time = int(time_info[0]) * 3600 + int(time_info[1]) * 60 + float(time_info[2])
-                    pbar.update(elapsed_time - pbar.n)
+        # with tqdm(total=duration, unit="s", dynamic_ncols=True) as pbar:
+        #     for line in process.stderr:
+        #         if "time=" in line:
+        #             time_info = line.split("=")[1].split()[0].split(":")
+        #             elapsed_time = int(time_info[0]) * 3600 + int(time_info[1]) * 60 + float(time_info[2])
+        #             pbar.update(elapsed_time - pbar.n)
 
         process.wait()  # Wait for the process to finish
         print("\nConversion successful.")
