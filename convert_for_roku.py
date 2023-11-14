@@ -55,6 +55,9 @@ def convert(input_file):
     """
     Convert the input file, keeping the video codec unchanged and changing the audio codec to E-AC3.
     """
+    output_file = f"{input_file.stem}_EAC3{input_file.suffix}"
+    input_file = ""
+    
     ffmpeg_command = [
         'ffmpeg',
         '-i', str(input_file),
@@ -63,7 +66,6 @@ def convert(input_file):
         str(output_file)
     ]
 
-    output_file = f"{input_file.stem}_EAC3{input_file.suffix}"
 
     try:
         subprocess.run(ffmpeg_command, check=True)
