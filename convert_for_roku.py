@@ -55,8 +55,6 @@ def convert(input_file):
     """
     Convert the input file, keeping the video codec unchanged and changing the audio codec to E-AC3.
     """
-    output_file = f"{input_file.stem}_EAC3{input_file.suffix}"
-
     ffmpeg_command = [
         'ffmpeg',
         '-i', str(input_file),
@@ -64,6 +62,8 @@ def convert(input_file):
         '-c:a', 'eac3',  # Convert audio codec to E-AC3
         str(output_file)
     ]
+
+    output_file = f"{input_file.stem}_EAC3{input_file.suffix}"
 
     try:
         subprocess.run(ffmpeg_command, check=True)
@@ -79,7 +79,7 @@ def process_files_in_directory(directory):
             if result == "conversion_required":
                 convert(file_path)
 
-
+############## Program start ###############
 # Get user input
 user_input = input("Enter a file or folder path: ")
 
