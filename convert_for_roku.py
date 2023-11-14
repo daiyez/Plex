@@ -70,12 +70,25 @@ def convert(input_file):
         '-i', str(input_path),
         '-c:v', 'copy',  # Copy video codec
         '-c:a', 'eac3',  # Convert audio codec to E-AC3
-        str(output_file)
+        str(output_file),
+        '-progress', '-'  # Output progress information to stdout
     ]
 
     try:
-        subprocess.run(ffmpeg_command, check=True)
-        print(f"Conversion successful. Output file: {output_file}")
+        # Start ffmpeg process with subprocess.PIPE to capture its output
+        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
+
+        # Display a progress bar
+        print("Converting:")
+        for line in process.stderr:
+            if "out_time" in line:
+                progress_info = line.strip().split('=')
+                progress_percentage = int(float(progress_info[1]) * 100)
+                print(f"\r[{progress_percentage:3}%] {input_path.name}", end='', flush=True)
+
+        process.wait()  # Wait for the process to finish
+        print("\nConversion successful.")
+
     except subprocess.CalledProcessError as e:
         print(f"Error running ffmpeg: {e}")
 
