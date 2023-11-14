@@ -5,6 +5,13 @@ import json
 from pathlib import Path
 from tqdm import tqdm
 
+class Colors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    END = '\033[0m'  # Reset color
+
 #check user input
 def check_path_type(user_input):
     """
@@ -42,11 +49,11 @@ def ffprobe_check(fcheck):
         for stream in ffprobe_output.get('streams', []):
             codec_name = stream.get('codec_name', '').lower()
             if codec_name == 'eac3':
-                print(f"{fcheck} is already using E-AC3 audio and doesn't need to be connverted for use on roku ")
+                print(f"{Colors.RED} {fcheck} is already using E-AC3 audio and doesn't need to be connverted for use on roku {Colors.END}")
                 return "no_conversion_required"  # E-AC3 codec found
 
         # E-AC3 codec not found
-        print(f"{fcheck} needs to be converted to E-AC3 audio for use on roku")
+        print(f"{Colors.GREEN} {fcheck} needs to be converted to E-AC3 audio for use on roku {Colors.END}")
         return "conversion_required"
 
     except subprocess.CalledProcessError as e:
@@ -83,7 +90,7 @@ def convert(input_file):
         # Display a progress bar
         print("Converting:")
         with tqdm(total=100, unit="%", dynamic_ncols=True) as pbar:
-            for line in process.stderr:
+            for line in process.stdout:
                 if "out_time" in line:
                     progress_info = line.strip().split('=')
                     progress_percentage = int(float(progress_info[1]) * 100)
@@ -105,10 +112,10 @@ def process_files_in_directory(directory):
 
             #before probe check if it's a sample file
             if "sample" in file_name.lower():
-                print(f"Skipping '{file_name}' as it contains the word 'sample'.")
+                print(f"{Colors.RED} Skipping '{file_name}' as it contains the word 'sample'. {Colors.END}")
                 continue
             if file_extension not in video_extensions:
-                print(f"Skipping '{file_name}' it's not a valid video file {video_extensions}'.")
+                print(f"{Colors.RED} Skipping '{file_name}' it's not a valid video file {video_extensions} {Colors.END}.")
                 continue
 
             result = ffprobe_check(file_path)
