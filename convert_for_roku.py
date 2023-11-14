@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import imageio
 import subprocess
 import os
 import json
