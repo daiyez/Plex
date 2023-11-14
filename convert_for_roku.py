@@ -73,7 +73,7 @@ def convert(input_file):
         '-c:v', 'copy',  # Copy video codec
         '-c:a', 'eac3',  # Convert audio codec to E-AC3
         str(output_file),
-        '-progress', 'pipe:1'  # Output progress information to stdout
+        '-progress'
     ]
 
     try:
@@ -88,7 +88,7 @@ def convert(input_file):
         duration = float(subprocess.check_output(ffprobe_command, text=True).strip())
 
         # Start ffmpeg process
-        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, stdout=subprocess.PIPE, text=True, universal_newlines=True)
+        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, universal_newlines=True)
 
 
         # Display a progress bar
