@@ -3,6 +3,7 @@ import subprocess
 import os
 import json
 from pathlib import Path
+from tqdm import tqdm
 
 #check user input
 def check_path_type(user_input):
@@ -76,16 +77,27 @@ def convert(input_file):
     ]
 
     try:
-        # Start ffmpeg process with subprocess.PIPE to capture its output
+        # Run ffprobe to get video duration
+        ffprobe_command = [
+            'ffprobe',
+            '-v', 'error',
+            '-show_entries', 'format=duration',
+            '-of', 'default=noprint_wrappers=1:nokey=1',
+            str(input_path)
+        ]
+        duration = float(subprocess.check_output(ffprobe_command, text=True).strip())
+
+        # Start ffmpeg process
         process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
 
         # Display a progress bar
         print("Converting:")
-        for line in process.stderr:
-            if "out_time" in line:
-                progress_info = line.strip().split('=')
-                progress_percentage = int(float(progress_info[1]) * 100)
-                print(f"\r[{progress_percentage:3}%] {input_path.name}", end='', flush=True)
+        with tqdm(total=duration, unit="s", dynamic_ncols=True) as pbar:
+            for line in process.stderr:
+                if "time=" in line:
+                    time_info = line.split("=")[1].split()[0].split(":")
+                    elapsed_time = int(time_info[0]) * 3600 + int(time_info[1]) * 60 + float(time_info[2])
+                    pbar.update(elapsed_time - pbar.n)
 
         process.wait()  # Wait for the process to finish
         print("\nConversion successful.")
@@ -94,13 +106,19 @@ def convert(input_file):
         print(f"Error running ffmpeg: {e}")
 
 def process_files_in_directory(directory):
+    video_extensions = ['.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v']
+
     for folder_path, _, files in os.walk(directory):
         for file_name in files:
             file_path = os.path.join(folder_path, file_name)
+            _, file_extension = os.path.splitext(file_name)
 
             #before probe check if it's a sample file
             if "sample" in file_name.lower():
                 print(f"Skipping '{file_name}' as it contains the word 'sample'.")
+                continue
+            if file_extension not in video_extensions:
+                print(f"Skipping '{file_name}' it's not a valid video file {video_extensions}'.")
                 continue
 
             result = ffprobe_check(file_path)
