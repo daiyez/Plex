@@ -1,4 +1,4 @@
-#!/home/pi/Repos/Plex/convert_for_roku.py
+#!/usr/bin/env python3
 import imageio
 import subprocess
 import os
@@ -41,7 +41,7 @@ def ffprobe_check(fcheck):
         for stream in ffprobe_output.get('streams', []):
             codec_name = stream.get('codec_name', '').lower()
             if codec_name == 'eac3':
-            	print(f"{fcheck} is already using E-AC3 audio and doesn't need to be connverted for use on roku ")
+                print(f"{fcheck} is already using E-AC3 audio and doesn't need to be connverted for use on roku ")
                 return conversion_required  # E-AC3 codec found
 
         # E-AC3 codec not found
