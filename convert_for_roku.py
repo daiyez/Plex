@@ -63,7 +63,8 @@ def convert(input_file):
         print(f"Error: Input file '{input_file}' not found.")
         return
 
-    output_file = f"{input_path.stem}_EAC3{input_path.suffix}"
+    #put the file back in the same folder you go it from
+     output_file = input_path.with_name(f"{input_path.stem}_EAC3{input_path.suffix}")
     
     ffmpeg_command = [
         'ffmpeg',
@@ -79,7 +80,7 @@ def convert(input_file):
         process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
 
         # Display a progress bar
-        print("Converting:")
+        print("Converting {input_path.stem}:")
         for line in process.stderr:
             if "out_time" in line:
                 progress_info = line.strip().split('=')
@@ -96,6 +97,12 @@ def process_files_in_directory(directory):
     for folder_path, _, files in os.walk(directory):
         for file_name in files:
             file_path = os.path.join(folder_path, file_name)
+
+            #before probe check if it's a sample file
+            if "sample" in file_name.lower():
+                print(f"Skipping '{file_name}' as it contains the word 'sample'.")
+                continue
+
             result = ffprobe_check(file_path)
             if result == "conversion_required":
                 convert(file_path)
