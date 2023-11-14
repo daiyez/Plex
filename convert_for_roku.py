@@ -78,17 +78,19 @@ def convert(input_file):
 
     try:
         # Run ffprobe to get video duration
-        ffprobe_command = [
-            'ffprobe',
-            '-v', 'error',
-            '-show_entries', 'format=duration',
-            '-of', 'default=noprint_wrappers=1:nokey=1',
-            str(input_path)
+        ffmpeg_command = [
+            'ffmpeg',
+            '-i', str(input_path),
+            '-c:v', 'copy',  # Copy video codec
+            '-c:a', 'eac3',  # Convert audio codec to E-AC3
+            str(output_file),
+            '-progress', 'pipe:1'  # Output progress information to stdout
         ]
         duration = float(subprocess.check_output(ffprobe_command, text=True).strip())
 
         # Start ffmpeg process
-        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
+        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, stdout=subprocess.PIPE, text=True, universal_newlines=True)
+
 
         # Display a progress bar
         print("Converting:")
