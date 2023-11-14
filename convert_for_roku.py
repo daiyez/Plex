@@ -80,7 +80,7 @@ def convert(input_file):
         '-c:v', 'copy',  # Copy video codec
         '-c:a', 'eac3',  # Convert audio codec to E-AC3
         str(output_file),
-        '-progress'  # Output progress information to stdout
+        '-progress', 'pipe:1'  # Output progress information to stdout
     ]
 
     try:
