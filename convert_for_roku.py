@@ -71,16 +71,13 @@ def convert(input_file):
     except subprocess.CalledProcessError as e:
         print(f"Error running ffmpeg: {e}")
 
-def find_bottom(root_folder, target_extension):
-    """
-    Search for a file with the specified extension within the specified root folder and its subdirectories.
-    Return the full path if found, otherwise return None.
-    """
-    for folder, _, files in os.walk(root_folder):
-        for file in files:
-            if file.lower().endswith(target_extension.lower()):
-                return os.path.join(folder, file)
-    return None
+def process_files_in_directory(directory):
+    for folder_path, _, files in os.walk(directory):
+        for file_name in files:
+            file_path = os.path.join(folder_path, file_name)
+            result = ffprobe_check(file_path)
+            if result == "conversion_required":
+                convert(file_path)
 
 
 # Get user input
@@ -94,14 +91,8 @@ if path_type == "File":
     print(f"The input '{user_input}' is a file.")
     ffprobe_check(user_input)
 elif path_type == "Folder":
-    print(f"The input '{user_input}' is a folder. Let's check each item in the folder")
-    
-    files_in_folder = [f for f in os.listdir(user_input) if os.path.isfile(os.path.join(user_input, f))]
-    for file_name in files_in_folder:
-        file_path = os.path.join(user_input, file_name)
-        result = ffprobe_check(file_path)
-        if result == "conversion_required":
-            convert(file_path)        
+    print(f"The input '{user_input}' is a folder. Let's check each item in the folder")    
+    process_files_in_directory(user_input)
 
 else:
     print(f"The input '{user_input}' does not exist.")
