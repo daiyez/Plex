@@ -2,6 +2,7 @@
 import subprocess
 import os
 import json
+from pathlib import Path
 
 #check user input
 def check_path_type(user_input):
@@ -55,17 +56,22 @@ def convert(input_file):
     """
     Convert the input file, keeping the video codec unchanged and changing the audio codec to E-AC3.
     """
-    output_file = f"{input_file.stem}_EAC3{input_file.suffix}"
-    input_file = ""
+    input_path = Path(input_file)
+    
+    # Ensure the input file exists before proceeding
+    if not input_path.exists():
+        print(f"Error: Input file '{input_file}' not found.")
+        return
+
+    output_file = f"{input_path.stem}_EAC3{input_path.suffix}"
     
     ffmpeg_command = [
         'ffmpeg',
-        '-i', str(input_file),
+        '-i', str(input_path),
         '-c:v', 'copy',  # Copy video codec
         '-c:a', 'eac3',  # Convert audio codec to E-AC3
         str(output_file)
     ]
-
 
     try:
         subprocess.run(ffmpeg_command, check=True)
