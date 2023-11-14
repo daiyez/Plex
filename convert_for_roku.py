@@ -101,7 +101,7 @@ elif path_type == "Folder":
     for file_name in files_in_folder:
 	    file_path = os.path.join(user_input, file_name)
 	    result = ffprobe_check(file_path)
-	    if result == conversion_required
+	    if result == "conversion_required"
 	    	convert(file_path)
 
 else:
