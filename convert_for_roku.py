@@ -41,15 +41,15 @@ def ffprobe_check(fcheck):
             codec_name = stream.get('codec_name', '').lower()
             if codec_name == 'eac3':
                 print(f"{fcheck} is already using E-AC3 audio and doesn't need to be connverted for use on roku ")
-                return conversion_required  # E-AC3 codec found
+                return "no_conversion_required"  # E-AC3 codec found
 
         # E-AC3 codec not found
         print(f"{fcheck} needs to be converted to E-AC3 audio for use on roku")
-        return no_conversion_required
+        return "conversion_required"
 
     except subprocess.CalledProcessError as e:
         print(f"Error running ffprobe: {e}")
-        return False
+        return "error"
 
 def convert(input_file):
     """
@@ -98,10 +98,10 @@ elif path_type == "Folder":
     
     files_in_folder = [f for f in os.listdir(user_input) if os.path.isfile(os.path.join(user_input, f))]
     for file_name in files_in_folder:
-	    file_path = os.path.join(user_input, file_name)
-	    result = ffprobe_check(file_path)
-	    if result == "conversion_required":
-	    	convert(file_path)
+        file_path = os.path.join(user_input, file_name)
+        result = ffprobe_check(file_path)
+        if result == "conversion_required":
+            convert(file_path)        
 
 else:
     print(f"The input '{user_input}' does not exist.")
