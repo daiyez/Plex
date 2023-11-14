@@ -64,7 +64,7 @@ def convert(input_file):
         return
 
     #put the file back in the same folder you go it from
-     output_file = input_path.with_name(f"{input_path.stem}_EAC3{input_path.suffix}")
+    output_file = input_path.with_name(f"{input_path.stem}_EAC3{input_path.suffix}")
     
     ffmpeg_command = [
         'ffmpeg',
