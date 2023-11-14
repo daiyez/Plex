@@ -73,32 +73,21 @@ def convert(input_file):
         '-c:v', 'copy',  # Copy video codec
         '-c:a', 'eac3',  # Convert audio codec to E-AC3
         str(output_file),
-        '-progress'
+        '-progress', 'pipe:1'  # Output progress information to stdout
     ]
 
     try:
-        # Run ffprobe to get video duration
-        ffprobe_command = [
-            'ffprobe',
-            '-v', 'error',
-            '-show_entries', 'format=duration',
-            '-of', 'default=noprint_wrappers=1:nokey=1',
-            str(input_path)
-        ]
-        duration = float(subprocess.check_output(ffprobe_command, text=True).strip())
-
-        # Start ffmpeg process
-        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, universal_newlines=True)
-
+        # Start ffmpeg process with subprocess.PIPE to capture its output
+        process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, stdout=subprocess.PIPE, text=True, universal_newlines=True)
 
         # Display a progress bar
         print("Converting:")
-        # with tqdm(total=duration, unit="s", dynamic_ncols=True) as pbar:
-        #     for line in process.stderr:
-        #         if "time=" in line:
-        #             time_info = line.split("=")[1].split()[0].split(":")
-        #             elapsed_time = int(time_info[0]) * 3600 + int(time_info[1]) * 60 + float(time_info[2])
-        #             pbar.update(elapsed_time - pbar.n)
+        with tqdm(total=100, unit="%", dynamic_ncols=True) as pbar:
+            for line in process.stderr:
+                if "out_time" in line:
+                    progress_info = line.strip().split('=')
+                    progress_percentage = int(float(progress_info[1]) * 100)
+                    pbar.update(progress_percentage - pbar.n)
 
         process.wait()  # Wait for the process to finish
         print("\nConversion successful.")
