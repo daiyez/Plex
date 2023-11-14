@@ -80,7 +80,7 @@ def convert(input_file):
         process = subprocess.Popen(ffmpeg_command, stderr=subprocess.PIPE, text=True, bufsize=1, universal_newlines=True)
 
         # Display a progress bar
-        print("Converting {input_path.stem}:")
+        print("Converting:")
         for line in process.stderr:
             if "out_time" in line:
                 progress_info = line.strip().split('=')
