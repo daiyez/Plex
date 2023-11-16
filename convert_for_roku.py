@@ -147,7 +147,7 @@ print(f"{user_input}")
 # #clean up old files
 output_file = f"{user_input} find_output.txt"
 # Command to find files and write the output to a file
-command = f"find  -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > {output_file}"
+command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > {output_file}"
 # Execute the command
 subprocess.run(command, shell=True)
 
