@@ -148,7 +148,7 @@ print(f"{user_input}")
 output_file = f"{user_input} find_output.txt"
 print(f"{output_file}")
 # Command to find files and write the output to a file
-command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > {output_file}"
+command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > '{output_file}'"
 print(f"{command}")
 # Execute the command
 subprocess.run(command, shell=True)
