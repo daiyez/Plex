@@ -149,7 +149,7 @@ output_file = f"{user_input}/find_output.txt"
 print(f"{output_file}")
 # Command to find files and write the output to a file
 command1 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
-command2 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name 'find_output' -execdir rm {{}} +"
+command2 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name '*.txt' -execdir rm {{}} +"
 print(f"{command1}")
 print(f"{command2}")
 # Execute the command
