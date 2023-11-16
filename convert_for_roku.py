@@ -129,7 +129,7 @@ user_input = input("Enter a file or folder path: ")
 # Check and print the type of the path
 path_type = check_path_type(user_input)
 
-Depending on file or folder either do once or do in a loop
+#Depending on file or folder either do once or do in a loop
 if path_type == "File":
     print(f"The input '{user_input}' is a file.")
     ffprobe_check(user_input)
