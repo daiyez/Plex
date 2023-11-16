@@ -129,30 +129,29 @@ user_input = input("Enter a file or folder path: ")
 # Check and print the type of the path
 path_type = check_path_type(user_input)
 
-#Depending on file or folder either do once or do in a loop
-# if path_type == "File":
-#     print(f"The input '{user_input}' is a file.")
-#     ffprobe_check(user_input)
-# elif path_type == "Folder":
-#     print(f"The input '{user_input}' is a folder. Let's check each item in the folder")    
-#     process_files_in_directory(user_input)
+Depending on file or folder either do once or do in a loop
+if path_type == "File":
+    print(f"The input '{user_input}' is a file.")
+    ffprobe_check(user_input)
+elif path_type == "Folder":
+    print(f"The input '{user_input}' is a folder. Let's check each item in the folder")    
+    process_files_in_directory(user_input)
 
-# else:
-#     print(f"The input '{user_input}' does not exist.")
+else:
+    print(f"The input '{user_input}' does not exist.")
 
-# print("SCRIPT IS NOW COMPLETE")
+print("CONVERSION IS NOW COMPLETE \n")
 
-print(f"{user_input}")
-#to scary lets find another way to do this.
+
+
 # #clean up old files
+print("Beginning Clean up\n")
 output_file = f"{user_input}/find_output.txt"
-print(f"{output_file}")
-# Command to find files and write the output to a file
+
+# Commands to find files and write the output to a file
 command1 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
 command2 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name '*.txt' -execdir rm {{}} +"
-print(f"{command1}")
-print(f"{command2}")
-# Execute the command
+# Execute the commands
 subprocess.run(command1, shell=True)
 subprocess.run(command2, shell=True)
 
