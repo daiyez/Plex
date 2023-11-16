@@ -130,15 +130,15 @@ user_input = input("Enter a file or folder path: ")
 path_type = check_path_type(user_input)
 
 #Depending on file or folder either do once or do in a loop
-if path_type == "File":
-    print(f"The input '{user_input}' is a file.")
-    ffprobe_check(user_input)
-elif path_type == "Folder":
-    print(f"The input '{user_input}' is a folder. Let's check each item in the folder")    
-    process_files_in_directory(user_input)
+# if path_type == "File":
+#     print(f"The input '{user_input}' is a file.")
+#     ffprobe_check(user_input)
+# elif path_type == "Folder":
+#     print(f"The input '{user_input}' is a folder. Let's check each item in the folder")    
+#     process_files_in_directory(user_input)
 
-else:
-    print(f"The input '{user_input}' does not exist.")
+# else:
+#     print(f"The input '{user_input}' does not exist.")
 
 # print("SCRIPT IS NOW COMPLETE")
 
@@ -146,7 +146,7 @@ else:
 # #clean up old files
 output_file = f"{user_input} find_output.txt"
 # Command to find files and write the output to a file
-command = f"find {user_input} -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > {output_file}"
+command = f"find  -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > {output_file}"
 # Execute the command
 subprocess.run(command, shell=True)
 
