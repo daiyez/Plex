@@ -140,3 +140,13 @@ elif path_type == "Folder":
 else:
     print(f"The input '{user_input}' does not exist.")
 
+# print("SCRIPT IS NOW COMPLETE")
+
+#to scary lets find another way to do this.
+# #clean up old files
+output_file = f"{user_input} find_output.txt"
+# Command to find files and write the output to a file
+command = f"find {user_input} -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > {output_file}"
+# Execute the command
+subprocess.run(command, shell=True)
+
