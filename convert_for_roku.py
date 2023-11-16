@@ -142,6 +142,7 @@ path_type = check_path_type(user_input)
 
 # print("SCRIPT IS NOW COMPLETE")
 
+print(f"{user_input}")
 #to scary lets find another way to do this.
 # #clean up old files
 output_file = f"{user_input} find_output.txt"
