@@ -145,9 +145,10 @@ path_type = check_path_type(user_input)
 print(f"{user_input}")
 #to scary lets find another way to do this.
 # #clean up old files
-output_file = f"{user_input} find_output.txt"
+output_file = f"{user_input}/find_output.txt"
 print(f"{output_file}")
 # Command to find files and write the output to a file
+command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
 command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' -execdir rm {{}} + > '{output_file}'"
 print(f"{command}")
 # Execute the command
