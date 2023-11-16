@@ -148,9 +148,11 @@ print(f"{user_input}")
 output_file = f"{user_input}/find_output.txt"
 print(f"{output_file}")
 # Command to find files and write the output to a file
-command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
-command = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name 'find_output' -execdir rm {{}} + > '{output_file}'"
-print(f"{command}")
+command1 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
+command2 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name 'find_output' -execdir rm {{}} +"
+print(f"{command1}")
+print(f"{command2}")
 # Execute the command
-subprocess.run(command, shell=True)
+subprocess.run(command1, shell=True)
+subprocess.run(command2, shell=True)
 
