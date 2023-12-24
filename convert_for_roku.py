@@ -157,7 +157,7 @@ else:
 
 print("CONVERSION IS NOW COMPLETE \n")
 
-if cleanup_input:
+if cleanup_input == "y":
     cleanup(file_input)    
 else:
     print("No Cleanup Required.\n")
