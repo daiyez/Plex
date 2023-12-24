@@ -122,36 +122,45 @@ def process_files_in_directory(directory):
             if result == "conversion_required":
                 convert(file_path)
 
-############## Program start ###############
-# Get user input
-user_input = input("Enter a file or folder path: ")
-
-# Check and print the type of the path
-path_type = check_path_type(user_input)
-
-#Depending on file or folder either do once or do in a loop
-if path_type == "File":
-    print(f"The input '{user_input}' is a file.")
-    ffprobe_check(user_input)
-elif path_type == "Folder":
-    print(f"The input '{user_input}' is a folder. Let's check each item in the folder")    
-    process_files_in_directory(user_input)
-
-else:
-    print(f"The input '{user_input}' does not exist.")
-
-print("CONVERSION IS NOW COMPLETE \n")
-
-
-
-# #clean up old files
+def cleanup(file_input):
+    # #clean up old files
 print("Beginning Clean up\n")
-output_file = f"{user_input}/find_output.txt"
+output_file = f"{file_input}/find_output.txt"
 
 # Commands to find files and write the output to a file
-command1 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
-command2 = f"find '{user_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name '*.txt' -execdir rm {{}} +"
+command1 = f"find '{file_input}' -type f ! -name '*EAC3*' ! -name '*.srt' > '{output_file}'"
+command2 = f"find '{file_input}' -type f ! -name '*EAC3*' ! -name '*.srt' ! -name '*.txt' -execdir rm {{}} +"
 # Execute the commands
 subprocess.run(command1, shell=True)
 subprocess.run(command2, shell=True)
+
+
+
+############## Program start ###############
+# Get user input
+file_input = input("Enter a file or folder path: ")
+cleanup_input = input("Would you like to perform clean up after conversion: y/n")
+
+# Check and print the type of the path
+path_type = check_path_type(file_input)
+
+#Depending on file or folder either do once or do in a loop
+if path_type == "File":
+    print(f"The input '{file_input}' is a file.")
+    ffprobe_check(file_input)
+elif path_type == "Folder":
+    print(f"The input '{file_input}' is a folder. Let's check each item in the folder")    
+    process_files_in_directory(file_input)
+
+else:
+    print(f"The input '{file_input}' does not exist.")
+
+print("CONVERSION IS NOW COMPLETE \n")
+
+if cleanup_input:
+    cleanup(file_input)    
+else:
+    print("No Cleanup Required.\n")
+
+
 
